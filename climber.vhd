@@ -33,6 +33,8 @@ begin
         variable peak_var : std_logic_vector(17 downto 0) := (others => '0');
         variable len_var  : std_logic_vector(7 downto 0) := (others => '0');
 
+        variable shift : std_logic_vector(4 downto 0) := (others => '0');
+
     begin
         if rising_edge(clk) then
             if go = '1' then
@@ -51,12 +53,72 @@ begin
                         peak_var := root_var;
                     end if;
 
-                    root_var := '0' & root_var(17 downto 1);
-                    len_var  := len_var + 2;
-                elsif root_var(1 downto 0) = "00" then
+                    len_var  := len_var + 1;
+                end if;
+
+                -- priority encoder
+                if root_var(0) = '1' then
+                    shift := "00000";
+                elsif root_var(1) = '1' then
+                    shift := "00001";
+                elsif root_var(2) = '1' then
+                    shift := "00010";
+                elsif root_var(3) = '1' then
+                    shift := "00011";
+                elsif root_var(4) = '1' then
+                    shift := "00100";
+                elsif root_var(5) = '1' then
+                    shift := "00101";
+                elsif root_var(6) = '1' then
+                    shift := "00110";
+                elsif root_var(7) = '1' then
+                    shift := "00111";
+                elsif root_var(8) = '1' then
+                    shift := "01000";
+                elsif root_var(9) = '1' then
+                    shift := "01001";
+                elsif root_var(10) = '1' then
+                    shift := "01010";
+                elsif root_var(11) = '1' then
+                    shift := "01011";
+                elsif root_var(12) = '1' then
+                    shift := "01100";
+                elsif root_var(13) = '1' then
+                    shift := "01101";
+                elsif root_var(14) = '1' then
+                    shift := "01110";
+                elsif root_var(15) = '1' then
+                    shift := "01111";
+                elsif root_var(16) = '1' then
+                    shift := "10000";
+                elsif root_var(17) = '1' then
+                    shift := "10001";
+                else
+                    shift := "-----";
+                end if;
+
+                -- barrel shifter
+                if shift(4) = '1' then
+                    root_var := "0000000000000000" & root_var(17 downto 16);
+                    len_var  := len_var + 16;
+                end if;
+
+                if shift(3) = '1' then
+                    root_var := "00000000" & root_var(17 downto 8);
+                    len_var  := len_var + 8;
+                end if;
+
+                if shift(2) = '1' then
+                    root_var := "0000" & root_var(17 downto 4);
+                    len_var  := len_var + 4;
+                end if;
+
+                if shift(1) = '1' then
                     root_var := "00" & root_var(17 downto 2);
                     len_var  := len_var + 2;
-                else
+                end if;
+
+                if shift(0) = '1' then
                     root_var := '0' & root_var(17 downto 1);
                     len_var  := len_var + 1;
                 end if;

@@ -41,7 +41,7 @@ architecture RTL of collatz is
     signal root : std_logic_vector(8 downto 0) := (others => '0');
     signal peak : std_logic_vector(17 downto 0) := (others => '0');
     signal len  : std_logic_vector(7 downto 0) := (others => '0');
-    signal done : std_logic := '0';
+    signal done : std_logic_vector(1 downto 0) := (others => '0');
 
     signal root_chain : std_logic_vector(9 downto 0) := (others => '0');
 
@@ -55,7 +55,7 @@ begin
         root => root_chain,
         peak => peak,
         len  => len,
-        done => done
+        done => done(0)
     );
 
     sorter_p : sorter port map(
@@ -77,7 +77,7 @@ begin
     process(clk)
     begin
         if rising_edge(clk) then
-            if done = '1' and alldone = '0' then
+            if (done = "01" and alldone = '0') then
                 chain_reg <= (root & '1', peak, len);
                 root <= root + 1;
 
@@ -89,6 +89,8 @@ begin
             else
                 go <= '0';
             end if;
+
+            done(1) <= done(0);
         end if;
     end process;
 
