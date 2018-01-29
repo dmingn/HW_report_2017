@@ -50,11 +50,16 @@ begin
                     if peak_var < root_var then
                         peak_var := root_var;
                     end if;
+
+                    root_var := '0' & root_var(17 downto 1);
+                    len_var  := len_var + 2;
+                elsif root_var(1 downto 0) = "00" then
+                    root_var := "00" & root_var(17 downto 2);
+                    len_var  := len_var + 2;
                 else
                     root_var := '0' & root_var(17 downto 1);
+                    len_var  := len_var + 1;
                 end if;
-
-                len_var  := len_var + 1;
             end if;
         end if;
 
