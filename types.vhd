@@ -14,4 +14,9 @@ package types is
     type chains4_t is array(0 to 3) of chain_t;
     type chains5_t is array(0 to 4) of chain_t;
 
+    type data_t is record
+        peak : std_logic_vector(17 downto 0);
+        len  : std_logic_vector(7 downto 0);
+    end record;
+
  end package types;
