@@ -1,6 +1,6 @@
 # ハードウェア構成法 冬休み特訓レポート2017 解答例
 
-v1, v2 の2段階の実装に tag をつけてあります.
+v1~v3 の3段階の実装に tag をつけてあります.
 (各実装については後述)
 Quartus Prime でコンパイルできるようにプロジェクトファイル等を入れてあります.
 (Quartus Prime 17.1.0 Lite Edition で確認)
@@ -75,39 +75,43 @@ climber は単純に毎クロック3掛けて1足すか2で割るかしていき
 (奇数の時は3倍して1足して2で割る, 4の倍数は4で割る)
 を実装したものです.
 
+### v3 : priority encoder and barrel shifter
+暴走テクニックの発展として,
+講義で扱った priority encoder と barrel shifter を用いて偶数を全てスキップしています.
+
 ## 性能
 各実装の性能を示します.
 
 ### クロック数
 シミュレーションによる clk_count の値です.
 
-|           | v1    | v2    |
-| --------- | ----- | ----- |
-| clk_count | 34914 | 19905 |
+|           | v1    | v2    | v3    |
+| --------- | ----- | ----- | ----- |
+| clk_count | 34914 | 19905 | 12397 |
 
 
 ### 最大動作周波数
 output_files/collatz.sta.rpt 内の Slow 1100mV 85 Model Fmax Summary から取ってきた値です.
 
-|                 | v1        | v2        |
-| --------------- | --------- | --------- |
-| Fmax            | 51.98 MHz | 52.81 MHz |
-| Restricted Fmax | 51.98 MHz | 52.81 MHz |
+|                 | v1        | v2        | v3        |
+| --------------- | --------- | --------- | --------- |
+| Fmax            | 51.98 MHz | 52.81 MHz | 53.17 MHz |
+| Restricted Fmax | 51.98 MHz | 52.81 MHz | 53.17 MHz |
 
 ### エレメント使用状況
 output_files/collatz.flow.rpt 内の Flow Summary から取ってきた値です.
 
-|                                 | v1                     | v2                     |
-| ------------------------------- | ---------------------- | ---------------------- |
-| Logic utilization (in ALMs)     | 306 / 56,480 ( < 1 % ) | 321 / 56,480 ( < 1 % ) |
-| Total registers                 | 331                    | 332                    |
-| Total pins                      | 177 / 268 ( 66 % )     | 177 / 268 ( 66 % )     |
-| Total virtual pins              | 0                      | 0                      |
-| Total block memory bits         | 0 / 7,024,640 ( 0 % )  | 0 / 7,024,640 ( 0 % )  |
-| Total DSP Blocks                | 0 / 156 ( 0 % )        | 0 / 156 ( 0 % )        |
-| Total HSSI RX PCSs              | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          |
-| Total HSSI PMA RX Deserializers | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          |
-| Total HSSI TX PCSs              | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          |
-| Total HSSI PMA TX Serializers   | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          |
-| Total PLLs                      | 0 / 13 ( 0 % )         | 0 / 13 ( 0 % )         |
-| Total DLLs                      | 0 / 4 ( 0 % )          | 0 / 4 ( 0 % )          |
+|                                 | v1                     | v2                     | v3                     |
+| ------------------------------- | ---------------------- | ---------------------- | ---------------------- |
+| Logic utilization (in ALMs)     | 306 / 56,480 ( < 1 % ) | 321 / 56,480 ( < 1 % ) | 378 / 56,480 ( < 1 % ) |
+| Total registers                 | 331                    | 332                    | 325                    |
+| Total pins                      | 177 / 268 ( 66 % )     | 177 / 268 ( 66 % )     | 177 / 268 ( 66 % )     |
+| Total virtual pins              | 0                      | 0                      | 0                      |
+| Total block memory bits         | 0 / 7,024,640 ( 0 % )  | 0 / 7,024,640 ( 0 % )  | 0 / 7,024,640 ( 0 % )  |
+| Total DSP Blocks                | 0 / 156 ( 0 % )        | 0 / 156 ( 0 % )        | 0 / 156 ( 0 % )        |
+| Total HSSI RX PCSs              | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          |
+| Total HSSI PMA RX Deserializers | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          |
+| Total HSSI TX PCSs              | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          |
+| Total HSSI PMA TX Serializers   | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          | 0 / 6 ( 0 % )          |
+| Total PLLs                      | 0 / 13 ( 0 % )         | 0 / 13 ( 0 % )         | 0 / 13 ( 0 % )         |
+| Total DLLs                      | 0 / 4 ( 0 % )          | 0 / 4 ( 0 % )          | 0 / 4 ( 0 % )          |

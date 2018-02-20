@@ -1,5 +1,5 @@
 Flow report for collatz
-Tue Feb 20 14:27:31 2018
+Tue Feb 20 14:46:17 2018
 Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 
 
@@ -40,15 +40,15 @@ refer to the applicable agreement for further details.
 +-------------------------------------------------------------------------------+
 ; Flow Summary                                                                  ;
 +---------------------------------+---------------------------------------------+
-; Flow Status                     ; Successful - Tue Feb 20 14:26:55 2018       ;
+; Flow Status                     ; Successful - Tue Feb 20 14:45:41 2018       ;
 ; Quartus Prime Version           ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
 ; Revision Name                   ; collatz                                     ;
 ; Top-level Entity Name           ; collatz                                     ;
 ; Family                          ; Cyclone V                                   ;
 ; Device                          ; 5CGXFC7C7F23C8                              ;
 ; Timing Models                   ; Final                                       ;
-; Logic utilization (in ALMs)     ; 321 / 56,480 ( < 1 % )                      ;
-; Total registers                 ; 332                                         ;
+; Logic utilization (in ALMs)     ; 378 / 56,480 ( < 1 % )                      ;
+; Total registers                 ; 325                                         ;
 ; Total pins                      ; 177 / 268 ( 66 % )                          ;
 ; Total virtual pins              ; 0                                           ;
 ; Total block memory bits         ; 0 / 7,024,640 ( 0 % )                       ;
@@ -67,7 +67,7 @@ refer to the applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 02/20/2018 14:23:29 ;
+; Start date & time ; 02/20/2018 14:41:56 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; collatz             ;
 +-------------------+---------------------+
@@ -78,7 +78,7 @@ refer to the applicable agreement for further details.
 +--------------------------------------+----------------------------------------+---------------+-------------+----------------+
 ; Assignment Name                      ; Value                                  ; Default Value ; Entity Name ; Section Id     ;
 +--------------------------------------+----------------------------------------+---------------+-------------+----------------+
-; COMPILER_SIGNATURE_ID                ; 36038727705844.151910420952656         ; --            ; --          ; --             ;
+; COMPILER_SIGNATURE_ID                ; 36038727705844.151910531652936         ; --            ; --          ; --             ;
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                     ; --            ; --          ; testbench      ;
 ; EDA_NATIVELINK_SIMULATION_TEST_BENCH ; testbench                              ; --            ; --          ; eda_simulation ;
 ; EDA_OUTPUT_DATA_FORMAT               ; Vhdl                                   ; --            ; --          ; eda_simulation ;
@@ -105,10 +105,10 @@ refer to the applicable agreement for further details.
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name               ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis      ; 00:00:29     ; 1.0                     ; 775 MB              ; 00:00:52                           ;
-; Fitter                    ; 00:02:55     ; 1.0                     ; 2324 MB             ; 00:04:24                           ;
-; TimeQuest Timing Analyzer ; 00:00:29     ; 1.1                     ; 1111 MB             ; 00:00:28                           ;
-; Total                     ; 00:03:53     ; --                      ; --                  ; 00:05:44                           ;
+; Analysis & Synthesis      ; 00:00:34     ; 1.0                     ; 781 MB              ; 00:00:59                           ;
+; Fitter                    ; 00:03:09     ; 1.0                     ; 2327 MB             ; 00:04:43                           ;
+; TimeQuest Timing Analyzer ; 00:00:30     ; 1.1                     ; 1113 MB             ; 00:00:29                           ;
+; Total                     ; 00:04:13     ; --                      ; --                  ; 00:06:11                           ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
