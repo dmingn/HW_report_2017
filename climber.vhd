@@ -2,6 +2,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.std_logic_arith.all;
+use IEEE.std_logic_misc.all;
 use work.types.all;
 
 entity climber is
@@ -9,9 +10,12 @@ entity climber is
         clk  : in  std_logic := '0';
         go   : in  std_logic := '0';
         root : in  std_logic_vector(9 downto 0) := (others => '0');
+        hit  : in  std_logic := '0';
+        data : in  data_t := ((others => '0'), (others => '0'));
         peak : out std_logic_vector(17 downto 0) := (others => '0');
         len  : out std_logic_vector(7 downto 0) := (others => '0');
-        done : out std_logic := '0'
+        done : out std_logic := '0';
+        addr : out std_logic_vector(8 downto 0) := (others => '0')
     );
 end climber;
 
@@ -21,11 +25,24 @@ architecture RTL of climber is
     signal peak_reg : std_logic_vector(17 downto 0) := (others => '0');
     signal len_reg  : std_logic_vector(7 downto 0) := (others => '0');
 
+    signal len_reg_prev : std_logic_vector(7 downto 0) := (others => '0');
+
+    signal valid : std_logic := '0';
+
 begin
 
     peak <= peak_reg;
     len  <= len_reg;
     done <= '1' when root_reg = 1 else '0';
+    addr <= root_reg(9 downto 1);
+
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            valid <= nor_reduce(root_reg(17 downto 10));
+            len_reg_prev <= len_reg;
+        end if;
+    end process;
 
     process(clk)
 
@@ -41,7 +58,17 @@ begin
                 root_var := "00000000" & root;
                 peak_var := (others => '0');
                 len_var  := (others => '0');
-            else
+            elsif (valid = '1' and hit = '1' and root_reg /= 1) then
+                root_var := "000000000000000001";
+
+                if data.peak < peak_reg then
+                    peak_var := peak_reg;
+                else
+                    peak_var := data.peak;
+                end if;
+
+                len_var := len_reg_prev + data.len;
+            elsif root_reg /= 1 then
                 root_var := root_reg;
                 peak_var := peak_reg;
                 len_var  := len_reg;

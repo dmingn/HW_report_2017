@@ -19,9 +19,12 @@ architecture RTL of collatz is
             clk  : in  std_logic;
             go   : in  std_logic;
             root : in  std_logic_vector(9 downto 0);
+            hit  : in  std_logic;
+            data : in  data_t;
             peak : out std_logic_vector(17 downto 0);
             len  : out std_logic_vector(7 downto 0);
-            done : out std_logic
+            done : out std_logic;
+            addr : out std_logic_vector(8 downto 0)
         );
     end component;
 
@@ -33,8 +36,18 @@ architecture RTL of collatz is
         );
     end component;
 
-    signal clk_count_reg : std_logic_vector(31 downto 0) := (others => '0');
+    component ram is
+        port (
+            clk          : in  std_logic;
+            write_enable : in  std_logic;
+            addr         : in  std_logic_vector(8 downto 0);
+            data_in      : in  data_t;
+            hit          : out std_logic;
+            data_out     : out data_t
+        );
+    end component;
 
+    signal clk_count_reg : std_logic_vector(31 downto 0) := (others => '0');
     signal alldone : std_logic := '0';
 
     signal go   : std_logic := '1';
@@ -47,25 +60,46 @@ architecture RTL of collatz is
 
     signal chain_reg : chain_t := ((others => '0'), (others => '0'), (others => '0'));
 
+    signal write_enable  : std_logic := '0';
+    signal addr_chain    : std_logic_vector(8 downto 0) := (others => '0');
+    signal addr_ram      : std_logic_vector(8 downto 0) := (others => '0');
+    signal hit           : std_logic := '0';
+    signal data_in       : data_t := ((others => '0'), (others => '0'));
+    signal data_out      : data_t := ((others => '0'), (others => '0'));
+
 begin
 
     climber_p : climber port map(
         clk  => clk,
         go   => go,
         root => root_chain,
+        hit  => hit,
+        data => data_out,
         peak => peak,
         len  => len,
-        done => done(0)
+        done => done(0),
+        addr => addr_chain
     );
 
-    sorter_p : sorter port map(
+    sorter_p : sorter port map (
         clk   => clk,
         chain => chain_reg,
         top4  => top4
     );
 
+    ram_p : ram port map (
+        clk          => clk,
+        write_enable => write_enable,
+        addr         => addr_ram,
+        data_in      => data_in,
+        hit          => hit,
+        data_out     => data_out
+    );
+
     clk_count <= clk_count_reg;
     root_chain <= root & '1';
+    data_in <= (peak, len);
+    addr_ram <= root - 1 when write_enable = '1' else addr_chain;
 
     process(clk, alldone)
     begin
@@ -79,6 +113,7 @@ begin
         if rising_edge(clk) then
             if (done = "01" and alldone = '0') then
                 chain_reg <= (root & '1', peak, len);
+                write_enable <= '1';
                 root <= root + 1;
 
                 if root >= 511 then
@@ -87,6 +122,7 @@ begin
                     go <= '1';
                 end if;
             else
+                write_enable <= '0';
                 go <= '0';
             end if;
 
